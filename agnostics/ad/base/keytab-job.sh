@@ -15,32 +15,32 @@ echo "    REALM: $REALM"
 
 mkdir /samba/etc
 cat > /etc/samba/smb.conf <<CONF
-    [global]
-        tls verify peer = no_check
+[global]
+    tls verify peer = no_check
 CONF
 
     cat > /config <<CONF
-    [libdefaults]
-    default_realm = $REALM
-    kdc_timesync = 1
-    ccache_type = 4
-    forwardable = true
-    proxiable = true
-    dns_lookup_kdc = false
-    dns_lookup_realm = false
+[libdefaults]
+default_realm = $REALM
+kdc_timesync = 1
+ccache_type = 4
+forwardable = true
+proxiable = true
+dns_lookup_kdc = false
+dns_lookup_realm = false
 
-        [realms]
-    $REALM = {
-      kdc = DC0.$REALM
-    }
+    [realms]
+$REALM = {
+  kdc = DC0.$REALM
+}
 
-    [domain_realm]
-    .$REALM = $REALM
-    .$realm = $REALM
-    ad = $REALM
-    AD = $REALM
-    .ad = $REALM
-    .AD = $REALM
+[domain_realm]
+.$REALM = $REALM
+.$realm = $REALM
+ad = $REALM
+AD = $REALM
+.ad = $REALM
+.AD = $REALM
 CONF
 
 kubectl -n ad create configmap "krb5.conf" --from-file /config -o yaml --dry-run=client | kubectl apply -f -
