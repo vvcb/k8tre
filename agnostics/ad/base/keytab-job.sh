@@ -29,7 +29,7 @@ proxiable = true
 dns_lookup_kdc = false
 dns_lookup_realm = false
 
-    [realms]
+[realms]
 $REALM = {
   kdc = DC0.$REALM
 }
