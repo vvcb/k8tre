@@ -62,3 +62,12 @@ samba-tool dns add dc0 $REALM '.' a $MYIP --use-krb5-ccache=/ccache || true
 
 MYRIP=$(echo $MYIP | awk -F. '{ print $4"."$3"."$2 }')
 samba-tool dns add dc0 10.in-addr.arpa $MYRIP PTR dc0.$REALM --use-krb5-ccache=/ccache
+
+######################################################################
+# Allow customisations.  Find all ConfigMaps prefixed with
+# `custom-samba-start-` and source them.
+kubectl -n "$NAMESPACE" get configmap -o yaml | \
+    yq '.items[] | select(.metadata.name | test("custom-samba-start-")) | .metadata.name' | \
+    while read cmName ; do
+	source <( kubectl -n "$NAMESPACE" get configmap "$cmName" -o jsonpath='{.data.*}')
+    done

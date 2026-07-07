@@ -61,7 +61,7 @@ spec:
       labels:
         app: samba
       annotations:
-        external-dns.alpha.kubernetes.io/internal-hostname: "dc0.ad.${DOMAIN}"
+        external-dns.alpha.kubernetes.io/internal-hostname: "dc0.ad.${DOMAIN},dc0.${DOMAIN}"
         external-dns.alpha.kubernetes.io/access: private
     spec:
       hostname: dc0
@@ -104,6 +104,11 @@ spec:
             - name: samba-init
               mountPath: /samba-health.sh
               subPath: samba-health.sh
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           securityContext:
             capabilities:
               add:
