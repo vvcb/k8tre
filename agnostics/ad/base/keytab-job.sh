@@ -43,7 +43,7 @@ AD = $REALM
 .AD = $REALM
 CONF
 
-kubectl -n ad create configmap "krb5.conf" --from-file /config -o yaml --dry-run=client | kubectl apply -f -
+kubectl -n "$NAMESPACE" create configmap "krb5.conf" --from-file /config -o yaml --dry-run=client | kubectl apply -f -
 cp /config /etc/krb5.conf
 
 kinit -k -t /Administrator.keytab -c Administrator.ccache "Administrator@$REALM"

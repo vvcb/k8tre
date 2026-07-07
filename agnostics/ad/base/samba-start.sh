@@ -66,8 +66,8 @@ samba-tool dns add dc0 10.in-addr.arpa $MYRIP PTR dc0.$REALM --use-krb5-ccache=/
 ######################################################################
 # Allow customisations.  Find all ConfigMaps prefixed with
 # `custom-samba-start-` and source them.
-kubectl -n ad get configmap -o yaml | \
+kubectl -n "$NAMESPACE" get configmap -o yaml | \
     yq '.items[] | select(.metadata.name | test("custom-samba-start-")) | .metadata.name' | \
     while read cmName ; do
-	source <( kubectl -n ad get configmap "$cmName" -o jsonpath='{.data.*}')
+	source <( kubectl -n "$NAMESPACE" get configmap "$cmName" -o jsonpath='{.data.*}')
     done
