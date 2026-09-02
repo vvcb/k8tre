@@ -1,0 +1,21 @@
+apiVersion: netbird.io/v1
+kind: NBSetupKey
+metadata:
+  name: cluster-setup-key
+  namespace: netbird
+spec:
+  managementURL: https://api.netbird.io
+  secretKeyRef:
+    name: netbird-secret
+    key: NB_SETUP_KEY
+---
+apiVersion: netbird.io/v1
+kind: NBSetupKey
+metadata:
+  name: cluster-setup-key
+  namespace: postgres
+spec:
+  managementURL: https://api.netbird.io
+  secretKeyRef:
+    name: netbird-secret
+    key: NB_SETUP_KEY

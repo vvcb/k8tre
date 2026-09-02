@@ -1,0 +1,24 @@
+
+managementURL: https://api.netbird.io
+
+netbirdAPI:
+  keyFromSecret:
+    name: netbird-secret
+    key: NB_API_KEY
+
+webhook:
+  enableCertManager: true
+  failurePolicy: Fail
+
+ingress:
+  enabled: true
+  kubernetesAPI:
+    enabled: true
+  namespacedNetworks: false
+  allowAutomaticPolicyCreation: true
+  router:
+    enabled: true
+    replicas: 1
+
+cluster:
+  name: vc-k8tre

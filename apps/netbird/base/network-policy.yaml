@@ -1,0 +1,11 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-https
+spec:
+  endpointSelector: {}
+  egress:
+    - toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

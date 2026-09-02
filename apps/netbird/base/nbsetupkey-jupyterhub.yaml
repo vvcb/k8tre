@@ -1,0 +1,10 @@
+apiVersion: netbird.io/v1
+kind: NBSetupKey
+metadata:
+  name: cluster-setup-key
+  namespace: jupyterhub
+spec:
+  managementURL: https://api.netbird.io
+  secretKeyRef:
+    name: netbird-secret
+    key: NB_SETUP_KEY
