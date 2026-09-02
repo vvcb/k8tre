@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: netbird
+  namespace: argocd
+  labels:
+    karectl.io/appset: netbird
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/karectl/karectl.git
+              revision: main
+              directories:
+                - path: apps/netbird/envs/*
+          - clusters:
+              selector:
+                matchLabels:
+                  environment: "{{index .path.segments 3}}"
+                matchExpressions:
+                  - key: include-federation
+                    operator: In
+                    values: ["true"]
+  template:
+    metadata:
+      name: "{{index .path.segments 1}}-{{.nameNormalized}}"
+      annotations:
+        argocd.argoproj.io/instance: "{{index .path.segments 1}}-{{index .path.segments 3}}"
+        argocd.argoproj.io/sync-wave: "0"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/karectl/karectl.git
+        targetRevision: main
+        path: "{{.path.path}}"
+        plugin:
+          name: kustomize-with-envsubst-v1.0
+          env:
+            - name: ENVIRONMENT
+              value: "{{.metadata.labels.environment}}"
+            - name: DOMAIN
+              value: "{{index .metadata.labels \"external-domain\"}}"
+      destination:
+        server: "{{.server}}"
+        namespace: netbird
+      # ignoreDifferences:
+      #   - group: postgresql.cnpg.io
+      #     kind: Cluster
+      #     name: gitea-postgres-cluster
+      #     jqPathExpressions:
+      #       - .spec.managed.roles[].connectionLimit
+      #       - .spec.managed.roles[].inherit
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
