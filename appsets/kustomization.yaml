@@ -6,7 +6,7 @@ resources:
   - agnostics/gateway.yaml
   - agnostics/cert-manager.yaml
   - agnostics/cluster-autoscaler.yaml
-  # - agnostics/cnpg.yaml
+  - agnostics/cnpg.yaml
   # TODO: Move CiliumClusterwideNetworkPolicy/allow-pod-to-pod-via-gateway from
   # apps/jupyterhub/base/network_policy.yaml to here
   - agnostics/default-network-policy.yaml
